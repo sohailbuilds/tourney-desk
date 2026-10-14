@@ -1,0 +1,2 @@
+<%- include('_head') %><div class="card"><h2><%= msg %></h2>
+<% if (typeof wa!=='undefined' && wa) { %><a class="btn" href="https://wa.me/<%= wa.replace(/\D/g,'') %>">Message the organizer on WhatsApp</a><% } %></div><%- include('_foot') %>

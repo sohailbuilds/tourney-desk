@@ -1,0 +1,27 @@
+<%- include('_head',{title:t.title}) %>
+<section class="hero"><small class="org"><%= t.org_name %></small><h1><%= t.title %></h1>
+<% if(t.game){ %><span class="pill"><%= t.game %></span><% } %>
+<div class="stats">
+<% if(t.entry_fee){ %><div><small>Entry</small><b><%= t.entry_fee %></b></div><% } %>
+<% if(t.prize){ %><div><small>Prize</small><b><%= t.prize %></b></div><% } %>
+<% if(t.starts_at){ %><div><small>Date & Time</small><b><%= t.starts_at %></b></div><% } %>
+<% if(t.slots>0){ const f=Math.min(t.count,t.slots); %><div><small>Slots</small><b><%= f %> / <%= t.slots %></b><div class="prog"><i style="width:<%= Math.round(f/t.slots*100) %>%"></i></div></div><% } %>
+</div>
+<% if(t.description){ %><p class="desc"><%= t.description %></p><% } %>
+<% if(t.hasResults){ %><a class="btn btn2" href="/<%= t.org_slug %>/<%= t.slug %>/leaderboard">Leaderboard</a><% } %></section>
+<% if(closed){ %><div class="card center"><% if(!t.live){ %><h2>Coming Soon</h2><small>Registration has not opened yet.</small><% } else { %><h2>Registration Closed</h2><small>All slots are filled or registration has been closed.</small><% } %></div>
+<% } else { %>
+<form class="card" method="post" enctype="multipart/form-data"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><h2>Register Now</h2>
+<% if(errors.length){ %><div class="err"><% errors.forEach(e=>{ %><div><%= e %></div><% }) %></div><% } %>
+<% if(t.needsPay){ %><div class="copy"><div><small>Pay the entry fee (UPI)</small><code><%= t.org_upi %></code></div><button type="button" data-copy="<%= t.org_upi %>">Copy</button></div>
+<a class="btn btn2 block" href="<%= t.upiLink %>">Pay with UPI</a><% } %>
+<% t.fields.forEach(f=>{ const v=values[f.key]||''; %>
+<% if(f.type==='checkbox'){ %><label class="chk"><input type="checkbox" name="<%= f.key %>" value="1" <%= v?'checked':'' %>><%= f.label %></label>
+<% } else { %><label><%= f.label %><%= f.required?' *':'' %></label>
+<% if(f.type==='select'){ %><select name="<%= f.key %>"><option value="">Select an option</option><% (f.options||[]).forEach(o=>{ %><option <%= v===o?'selected':'' %>><%= o %></option><% }) %></select>
+<% } else if(f.type==='file'){ %><input type="file" name="<%= f.key %>" accept="image/*">
+<% } else { %><input type="<%= f.type==='number'?'number':'text' %>" name="<%= f.key %>" value="<%= v %>" autocomplete="off"><% } %><% } %>
+<% }) %>
+<% if(t.needsPay){ %><label>UTR / UPI Ref No (12 digit) *</label><input name="utr" value="<%= values.utr||'' %>" autocomplete="off" inputmode="numeric" maxlength="14" placeholder="123456789012"><small>A screenshot is not required. After paying, open your UPI app history, select the transaction, copy the UTR or UPI Reference Number, and paste it here.</small><% } %>
+<button class="block">Register Now</button></form>
+<% } %><%- include('_foot') %>

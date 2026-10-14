@@ -1,0 +1,14 @@
+<%- include('_head',{title:'Matches',wide:true}) %>
+<a href="<%= p %>/t/<%= t.id %>">&larr; Registrations</a><h1><%= t.title %>: Matches</h1>
+<% if(error){ %><p class="err"><%= error %></p><% } %>
+<div class="card"><h2>Naya match</h2>
+<% if(!hasKey){ %><p class="err">Set GEMINI_API_KEY to enable automatic screenshot reading. Manual entry is available without it.</p><% } %>
+<form method="post" action="<%= p %>/t/<%= t.id %>/match/scan" enctype="multipart/form-data"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><label>Result screenshots (select all screenshots for one match at once; maximum 8. Partial screenshots are supported, and duplicates are ignored.)</label>
+<input type="file" name="shots" accept="image/*" multiple><button>Read Screenshots</button></form>
+<a class="btn btn2" href="<%= p %>/t/<%= t.id %>/match/manual">Manual entry</a></div>
+<div class="card"><h2>Leaderboard</h2><%- include('_board',{rows}) %>
+<a class="btn btn2" target="_blank" href="/<%= t.org_slug %>/<%= t.slug %>/leaderboard">Public link</a></div>
+<div class="card"><h2>Matches</h2><% matches.forEach(m=>{ %><div>Match <%= m.number %> (<%= m.n %> teams) <form class="inline" method="post" action="<%= p %>/m/<%= m.id %>/delete" onsubmit="return confirm('Delete?')"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn2">X</button></form></div><% }) %></div>
+<div class="card"><h2>Scoring</h2><form method="post" action="<%= p %>/t/<%= t.id %>/scoring"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><textarea name="scoring" rows="10" style="font-family:monospace"><%= scoring %></textarea><button>Save</button></form>
+<small>placement_points: points awarded by rank. per_kill: points awarded per kill. Sorting: total points, kills, then best rank.</small></div>
+<%- include('_foot') %>

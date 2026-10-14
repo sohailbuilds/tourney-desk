@@ -1,0 +1,6 @@
+<%- include('_head',{title:'Registration Complete'}) %>
+<div class="card center"><div class="tick">✓</div><h2>Registration successful!</h2>
+<p><small>Save this private link. Your payment status and room ID/password will appear here when they are available.</small></p>
+<div class="copy"><div><small>Your private link</small><code><%= link %></code></div><button type="button" data-copy="<%= link %>">Copy</button></div>
+<a class="btn block" href="<%= link %>">View my registration</a>
+<% if(t.org_wa){ %><a class="btn btn2 block" href="https://wa.me/<%= t.org_wa.replace(/\D/g,'') %>">Message organizer on WhatsApp</a><% } %></div><%- include('_foot') %>

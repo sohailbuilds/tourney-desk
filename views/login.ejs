@@ -1,0 +1,3 @@
+<%- include('_head',{title:'Admin login'}) %><div class="card"><h2>Admin login</h2>
+<% if(error){ %><p class="err"><%= error %></p><% } %>
+<form method="post" action="/admin/login"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><label>Password</label><input type="password" name="password" autocomplete="current-password" required autofocus><button>Login</button></form></div><%- include('_foot') %>

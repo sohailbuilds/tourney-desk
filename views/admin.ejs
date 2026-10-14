@@ -1,0 +1,12 @@
+<%- include('_head',{title:'Admin',wide:true}) %>
+<h1>Admin <a class="btn btn2" href="/admin/logout">Logout</a></h1>
+<div class="card"><h2>Add Organizer</h2><form method="post" action="/admin/org"><input type="hidden" name="_csrf" value="<%= csrfToken %>">
+<label>Organizer or community name</label><input name="name" required><label>WhatsApp number (include country code, e.g. 919876543210)</label><input name="whatsapp"><button>Add</button></form></div>
+<% if(purchases.length){ %><div class="card"><h2>Credit requests</h2><% purchases.forEach(p=>{ %><div style="margin:8px 0"><b><%= p.org_name %></b>: <%= p.plan %> (<%= p.credits %> credits, <%= p.price %>), UTR <code><%= p.utr %></code>
+<form class="inline" method="post" action="/admin/purchase/<%= p.id %>/approve"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button>Approve</button></form></div><% }) %></div><% } %>
+<div class="card"><h2>Organizers</h2><small>Organizer signup link: <%= base %>/panel/signup</small><br>
+<% orgs.forEach(o=>{ %><div><b><%= o.name %></b> <small>/<%= o.slug %></small> <a href="/admin/t/new?org=<%= o.id %>">+ Tournament</a></div><% }) %>
+<% if(!orgs.length){ %><p>Add an organizer to get started.</p><% } %></div>
+<div class="card scroll"><h2>Tournaments</h2><table><tr><th>Organizer</th><th>Tournament</th><th>Regs</th><th>Status</th><th></th></tr>
+<% ts.forEach(t=>{ %><tr><td><%= t.org_name %></td><td><%= t.title %></td><td><%= t.regs %><%= t.slots?' / '+t.slots:'' %></td><td><%= t.status %></td><td><a href="/admin/t/<%= t.id %>">Manage</a> | <a href="/<%= t.org_slug %>/<%= t.slug %>" target="_blank">Public page</a></td></tr><% }) %></table></div>
+<%- include('_foot') %>

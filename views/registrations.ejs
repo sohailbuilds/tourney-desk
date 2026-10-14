@@ -1,0 +1,21 @@
+<%- include('_head',{title:t.title,wide:true}) %>
+<a href="<%= p %>">&larr; Back</a><h1><%= t.title %></h1>
+<div class="card">Link: <a href="<%= link %>"><%= link %></a><br>
+<button type="button" class="btn btn2" data-copy="<%= link %>">Link copy</button>
+<a class="btn" target="_blank" href="https://wa.me/?text=<%= encodeURIComponent(t.title+' — Register here: '+link) %>">Share on WhatsApp</a>
+<a class="btn" href="<%= p %>/t/<%= t.id %>/matches">Matches &amp; Leaderboard</a>
+<a class="btn btn2" href="<%= p %>/t/<%= t.id %>/export.csv">CSV export</a>
+<form class="inline" method="post" action="<%= p %>/t/<%= t.id %>/status"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn2"><%= t.status==='open'?'Close Registration':'Open Registration' %></button></form>
+<p>Total: <%= regs.length %><%= t.slots?' / '+t.slots:'' %> | Paid: <%= regs.filter(r=>r.paid).length %></p></div>
+<% if(!t.live){ %><div class="card"><h2>Draft — Not Published</h2><small>Publishing costs 1 credit and enables registration, room details, result scanning, and the leaderboard.</small>
+<form method="post" action="<%= p %>/t/<%= t.id %>/publish"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="block">Publish Tournament</button></form></div><% } %>
+<form class="card" method="post" action="<%= p %>/t/<%= t.id %>/room"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><h2>Room ID / Password</h2>
+<div class="row2"><div><label>Room ID</label><input name="room_id" value="<%= t.room_id||'' %>"></div><div><label>Password</label><input name="room_password" value="<%= t.room_password||'' %>"></div></div>
+<label class="chk"><input type="checkbox" name="released" value="1" <%= t.room_released?'checked':'' %>> Show room details to players (paid players only, or everyone for free tournaments)</label>
+<button>Save</button></form>
+<div class="card scroll"><table><tr><th>#</th><th>Paid</th><% t.fields.forEach(f=>{ %><th><%= f.label %></th><% }) %><% const hasUtr=regs.some(r=>r.answers.utr); %><% if(hasUtr){ %><th>UTR</th><% } %><th></th></tr>
+<% regs.forEach((r,i)=>{ %><tr><td><%= i+1 %></td>
+<td><form class="inline" method="post" action="<%= p %>/r/<%= r.id %>/paid"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn2 <%= r.paid?'ok':'no' %>"><%= r.paid?'Paid':'Unpaid' %></button></form></td>
+<% t.fields.forEach(f=>{ const v=r.answers[f.key]||''; %><td><% if(f.type==='file'&&v){ %><a target="_blank" href="/uploads/<%= v %>">View file</a><% } else { %><%= v %><% } %></td><% }) %><% if(hasUtr){ %><td><%= r.answers.utr||'' %></td><% } %>
+<td><form class="inline" method="post" action="<%= p %>/r/<%= r.id %>/delete" onsubmit="return confirm('Delete?')"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn2">X</button></form></td></tr><% }) %></table></div>
+<%- include('_foot') %>

@@ -1,0 +1,13 @@
+<%- include('_head',{title:'New Tournament'}) %>
+<div class="card"><h2>New Tournament</h2><% if(error){ %><p class="err"><%= error %></p><% } %>
+<form method="post" action="<%= p %>/t"><input type="hidden" name="_csrf" value="<%= csrfToken %>">
+<label>Organizer</label><select name="org_id"><% orgs.forEach(o=>{ %><option value="<%= o.id %>" <%= String(o.id)===String(org)?'selected':'' %>><%= o.name %></option><% }) %></select>
+<label>Title</label><input name="title" required><label>Game</label><input name="game" placeholder="BGMI / Free Fire / Valorant">
+<label>Entry fee</label><input name="entry_fee" placeholder="₹50 per team"><label>Prize</label><input name="prize" placeholder="₹5000">
+<label>Date / time</label><input name="starts_at" placeholder="25 Oct, 8 PM"><label>Slots (0 = unlimited)</label><input name="slots" type="number" value="0">
+<label>Description / rules</label><textarea name="description" rows="5"></textarea>
+<label>Form template</label><select id="tpl"><% Object.keys(templates).forEach(k=>{ %><option><%= k %></option><% }) %></select>
+<label>Form fields (JSON; editable. Supported types: text, number, select, file, checkbox)</label><textarea name="form_fields" id="ff" rows="12" style="font-family:monospace"></textarea>
+<button>Create</button></form></div>
+<script>const T=<%- JSON.stringify(templates).replace(/</g,'\\u003c') %>,s=document.getElementById('tpl'),a=document.getElementById('ff');
+const set=()=>a.value=JSON.stringify(T[s.value],null,1);s.onchange=set;set();</script><%- include('_foot') %>

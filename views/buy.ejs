@@ -1,0 +1,11 @@
+<%- include('_head',{title:'Credits'}) %>
+<a href="/panel">&larr; Dashboard</a><h1>Purchase Credits</h1>
+<% if(need){ %><p class="err">You need a credit to publish a tournament.</p><% } %><% if(ok){ %><p class="chip ok">Request submitted. Credits will be added after your payment is verified.</p><% } %>
+<div class="card"><h2>1. Make a Payment</h2>
+<% if(upi){ %><div class="copy"><div><small>UPI ID</small><code><%= upi %></code></div><button type="button" data-copy="<%= upi %>">Copy</button></div>
+<% } else { %><p class="err">The platform administrator has not configured a payment UPI ID yet.</p><% } %>
+<form method="post" action="/panel/buy"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><h2>2. Select a Plan and Enter the UTR</h2>
+<% plans.forEach((p,i)=>{ %><label class="chk"><input type="radio" name="plan" value="<%= p.id %>" <%= i===0?'checked':'' %>><%= p.name %> : <%= p.price %></label><% }) %>
+<label>UTR / Transaction ID</label><input name="utr" required minlength="6"><button class="block">Submit Request</button></form></div>
+<% if(list.length){ %><div class="card"><h2>Previous Requests</h2><% list.forEach(p=>{ %><div><%= p.plan %> <span class="chip <%= p.status==='approved'?'ok':'no' %>"><%= p.status %></span></div><% }) %></div><% } %>
+<%- include('_foot') %>

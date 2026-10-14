@@ -1,0 +1,3 @@
+<div class="scroll"><table><tr><th>#</th><th>Team</th><th>Matches</th><th>WWCD</th><th>Kills</th><th>Place pts</th><th>Total</th></tr>
+<% rows.forEach((r,i)=>{ %><tr><td><span class="rk r<%= i+1 %>"><%= i+1 %></span></td><td><%= r.label %></td><td><%= r.matches %></td><td><%= r.wins %></td><td><%= r.kills %></td><td><%= r.placePts %></td><td><b><%= r.total %></b></td></tr><% }) %></table></div>
+<% if(!rows.length){ %><p>No match results yet.</p><% } %>

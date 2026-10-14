@@ -1,0 +1,7 @@
+<%- include('_head',{title:mode==='signup'?'Organizer signup':'Organizer login'}) %>
+<div class="card"><h2><%= mode==='signup'?'Create an Organizer Account':'Login' %></h2><% if(error){ %><p class="err"><%= error %></p><% } %>
+<form method="post" action="/panel/<%= mode %>"><input type="hidden" name="_csrf" value="<%= csrfToken %>">
+<% if(mode==='signup'){ %><label>Community or organizer name</label><input name="name" required><label>WhatsApp number (919876543210)</label><input name="whatsapp"><% } %>
+<label>Email</label><input name="email" type="email" required><label>Password</label><input name="password" type="password" required minlength="12" maxlength="128" autocomplete="new-password">
+<button class="block"><%= mode==='signup'?'Create Account':'Login' %></button></form>
+<p><small><% if(mode==='signup'){ %>Already have an account? <a href="/panel/login">Login</a><% } else { %>New here? <a href="/panel/signup">Sign Up</a><% } %></small></p></div><%- include('_foot') %>

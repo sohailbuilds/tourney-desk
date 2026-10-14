@@ -1,0 +1,15 @@
+<%- include('_head',{title:'Dashboard'}) %>
+<section class="hero"><small class="org">Organizer</small><h1><%= o.name %></h1>
+<div class="chips"><span class="chip <%= o.credits>0?'ok':'no' %>">Credits: <%= o.credits %></span></div>
+<a class="btn" href="/panel/t/new"> + New Tournament</a> <a class="btn btn2" href="/panel/buy">Purchase Credits</a> <a class="btn btn2" href="/panel/logout">Logout</a></section>
+<form class="card" method="post" action="/panel/profile"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><h2>Payment details</h2><small>Players pay the entry fee directly to your UPI ID. The platform does not handle these payments.</small>
+<label>Your UPI ID (name@bank)</label><input name="upi" value="<%= o.upi||'' %>" placeholder="name@okhdfcbank"><label>WhatsApp number</label><input name="whatsapp" value="<%= o.whatsapp||'' %>"><button>Save</button></form>
+<div class="card"><h2>Tournaments</h2>
+<% ts.forEach(t=>{ const link=base+'/'+o.slug+'/'+t.slug; %><div style="padding:12px 0;border-bottom:1px solid var(--b)">
+<b><%= t.title %></b> <span class="chip <%= t.live?'ok':'no' %>"><%= t.live?'Live':'Draft' %></span> <small><%= t.regs %> registrations</small>
+<div class="copy"><div><small>Player registration link</small><code style="font-size:13px"><%= link %></code></div><button type="button" data-copy="<%= link %>">Copy</button></div>
+<% if(t.live){ %><a class="btn btn2" target="_blank" href="https://wa.me/?text=<%= encodeURIComponent(t.title+' — Register here: '+link) %>">Share on WhatsApp</a>
+<% } else { %><small>This link will work after the tournament is published.</small> <form class="inline" method="post" action="/panel/t/<%= t.id %>/publish"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button>Publish (1 credit)</button></form><% } %>
+<a class="btn btn2" href="/panel/t/<%= t.id %>">Manage</a></div><% }) %>
+<% if(!ts.length){ %><small>No tournaments yet. Create one above. Drafts are free; publishing costs 1 credit.</small><% } %></div>
+<%- include('_foot') %>

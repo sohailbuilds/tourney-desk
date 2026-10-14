@@ -1,0 +1,10 @@
+<%- include('_head',{title:'Review Match Results',wide:true}) %>
+<h1>Review and Save Results</h1><% if(error){ %><p class="err"><%= error %></p><% } %>
+<p>Rows outlined in red contain results the AI could not confidently read. Review them manually. If no team is selected, the result has not been matched to a registered team.</p>
+<form method="post" action="<%= p %>/t/<%= t.id %>/match"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><div class="scroll"><table><tr><th>Rank</th><th>Players (in-game names)</th><th>Kills</th><th>Team</th></tr>
+<% rows.forEach(r=>{ %><tr style="<%= r.unsure?'outline:2px solid #f87171':'' %>"><td><input name="rank" type="number" value="<%= r.rank %>" style="width:70px"></td>
+<td><input name="names" value="<%= r.names %>"><input type="hidden" name="unsure" value="<%= r.unsure?1:0 %>"><% if(r.note){ %><br><small><%= r.note %></small><% } %></td><td><input name="kills" type="number" value="<%= r.kills %>" style="width:70px"></td>
+<td><select name="reg"><option value="">(No match)</option><% regs.forEach(g=>{ %><option value="<%= g.id %>" <%= String(g.id)===String(r.reg)?'selected':'' %>><%= g.label %></option><% }) %></select></td></tr><% }) %></table></div>
+<div class="card"><h2>Add More Screenshots</h2><small>Upload screenshots for missing ranks. Existing ranks will not be duplicated; the most complete row will be retained.</small>
+<input type="file" name="shots" accept="image/*" multiple><button type="submit" class="btn2" formaction="<%= p %>/t/<%= t.id %>/match/scan" formenctype="multipart/form-data">Add More Screenshots</button></div>
+<button>Save Match</button> <a class="btn btn2" href="<%= p %>/t/<%= t.id %>/matches">Cancel</a></form><%- include('_foot') %>

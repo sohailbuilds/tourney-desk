@@ -1,0 +1,14 @@
+<%- include('_head',{title:t.title}) %>
+<section class="hero"><small class="org"><%= t.org_name %></small><h1><%= t.title %></h1><p class="desc">Team / Player: <b style="color:var(--t)"><%= label %></b></p>
+<div class="chips"><span class="chip ok">Registered ✓</span>
+<% if(!free){ %><span class="chip <%= r.paid?'ok':'no' %>"><%= r.paid?'Payment verified ✓':'Payment pending' %></span><% } %></div>
+<% if(t.starts_at){ %><small>Match: <%= t.starts_at %></small><% } %></section>
+<div class="card"><h2>Room details</h2>
+<% if(room==='show'){ %>
+<div class="copy"><div><small>Room ID</small><code><%= t.room_id %></code></div><button type="button" data-copy="<%= t.room_id %>">Copy</button></div>
+<div class="copy"><div><small>Password</small><code><%= t.room_password||'-' %></code></div><button type="button" data-copy="<%= t.room_password %>">Copy</button></div>
+<button type="button" class="btn2 block" data-copy="Room ID: <%= t.room_id %> | Password: <%= t.room_password %>">Copy Both</button>
+<% } else if(room==='unpaid'){ %><small>Room details will appear after your payment is verified. Contact the organizer if you need help.</small>
+<% } else { %><small>Your room ID and password will appear here when they are released. Refresh this page to check for updates.</small><% } %></div>
+<% if(hasResults){ %><a class="btn btn2 block" href="/<%= t.org_slug %>/<%= t.slug %>/leaderboard">View Leaderboard</a><% } %>
+<%- include('_foot') %>
